@@ -1,0 +1,6 @@
+int start(){
+for ( i = 1; i = i + 1; i <= 10){
+ display(i)
+}
+return 0;
+}

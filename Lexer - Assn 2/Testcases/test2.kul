@@ -1,0 +1,16 @@
+int start(){
+int a = 4; 
+int x = 5;
+if( a < 10){
+	x = x + 1;
+}
+otif ( 10 < a < 15){
+	x = x + 2;
+}
+otw {
+	x = x + 3;
+}
+display(x)
+display(a)
+return 0;
+}

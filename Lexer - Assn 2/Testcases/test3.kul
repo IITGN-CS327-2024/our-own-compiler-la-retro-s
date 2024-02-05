@@ -1,0 +1,13 @@
+int start(){
+int i; 
+for ( i = 1; i = i+1; i <= 10){
+	display(“inside for”);
+}
+
+int i = 3
+while (i != 10){
+	print(“inside while”);
+	i = i+1
+}
+return 0;
+}

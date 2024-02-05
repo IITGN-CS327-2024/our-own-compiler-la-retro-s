@@ -1,0 +1,11 @@
+int start(){
+bool a = True && False;
+display(a);
+word str = “Kulant”;
+Word str1 = “Pro”;
+str = str+str1 
+display(str)
+word x = “abhaykumar”;
+display(x[6]);
+return 0;
+}
