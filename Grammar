@@ -116,3 +116,5 @@ TRUE : 'true';
 FALSE : 'false';
 
 DOTIE : 'dotie';
+BIGINT : 'bigint';
+CHAR : 'char';
