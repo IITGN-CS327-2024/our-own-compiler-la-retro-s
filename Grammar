@@ -11,7 +11,7 @@ statements : statement SEMICOLON statements
            | statement SEMICOLON?
            | EMPTY;
 
-EMPTY : ;
+EMPTY : 
 
 statement : display_statement
           | input_statement
