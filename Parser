@@ -92,11 +92,19 @@ expression : number
 
 list_slice : word LSQUARE number COMMA number RSQUARE
 
-compound_variable_declaration : word_dec | list_dec
+compound_variable_declaration : word_dec | list_dec | tuple_dec
 
 word_dec : WORD word EQUALS QUOTATION word QUOTATION
 
 WORD : "word"
+
+tuple_dec : TUPLE word EQUALS LPAREN tuple_arg RPAREN
+
+TUPLE : "tuple"
+
+tuple_arg : tuple_data (COMMA tuple_data)*
+
+tuple_data : string | number | bool | decimal
 
 list_dec : dtype word LSQUARE RSQUARE EQUALS LSQUARE list_arg RSQUARE
 
@@ -212,6 +220,7 @@ display(5 + 10 * 3 + 2 ** 3);
 int nums[] = [7,22,33,13,483];
 word names[] = ['abhay','somesh' , 'harshita'];
 bool truths[] = [True, False, False];
+tuple x = (1.2, 5, 'abc', True);
 display(x);
 display(x[1,4]);
 constant int i=5;
