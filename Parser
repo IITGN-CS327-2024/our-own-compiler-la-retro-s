@@ -39,6 +39,17 @@ statement : display_statement
           | function_definition
           | exception_handling
           | expression
+          | modify
+
+modify : push_back | push_front
+
+push_back : word POINT PUSH_BACK LPAREN data_format RPAREN
+
+PUSH_BACK : "push_back"
+
+push_front : word POINT PUSH_FRONT LPAREN data_format RPAREN
+
+PUSH_FRONT : "push_front"
 
 display_statement : "display" LPAREN display_args RPAREN
 
@@ -89,6 +100,11 @@ expression : number
            | for_condition
            | compound_variable_declaration
            | list_slice
+           | list_perf
+
+list_perf : word POINT perform
+
+perform : "front" || "back" || "empty"
 
 list_slice : word LSQUARE number COMMA number RSQUARE
 
@@ -221,8 +237,13 @@ int nums[] = [7,22,33,13,483];
 word names[] = ['abhay','somesh' , 'harshita'];
 bool truths[] = [True, False, False];
 tuple x = (1.2, 5, 'abc', True);
+nums.push_front(60);
+nums.push_back(87)
 display(x);
 display(x[1,4]);
+display(x.front); 
+display(x.back); 
+display(x.empty);
 constant int i=5;
 int x = 10;
 dotie y;
