@@ -1,5 +1,6 @@
 from lark import Lark, Transformer
 from lark.tree import Tree
+import graphviz
 
 gram_file = """
 
@@ -242,36 +243,26 @@ bool : "True" | "False"
 %ignore WS
 """
 
+# def visualize_ast(ast):
+    # dot = graphviz.Digraph()
 
+    # def add_nodes(parent, tree):
+    #     if isinstance(tree, dict):
+    #         for key, value in tree.items():
+    #             child = f"{parent}_{key}"
+    #             dot.node(child, str(key))
+    #             dot.edge(parent, child)
+    #             add_nodes(child, value)
+    #     elif isinstance(tree, list):
+    #         for item in tree:
+    #             add_nodes(parent, item)
+    #     else:
+    #         dot.node(f"{parent}_{tree}", str(tree))
 
-class TerminalTransformer(Transformer):
-    def __default__(self, data, children, meta):
-        return data
+    # dot.node("root", "AST")
+    # add_nodes("root", ast)
 
-    def program(self, children):
-        # We expect only one child, which is the "program" node
-        return children[0]
-
-    def statements(self, children):
-        # Flatten the statements
-        return [child for statement in children for child in statement]
-
-    def statement(self, children):
-        return children[0]
-
-    def expression(self, children):
-        return children[0]
-
-    def typedef(self, children):
-        print("Children in typedef:", children)
-        if len(children) > 1:
-            return children[1]  # Extract the terminal within quotes
-        else:
-            return children[0]  # No need to extract if it's a single terminal
-
-    def QUOTATION(self, children):
-        print("Children in QUOTATION:", children)
-        return children[0]  # Extract the content within quotes
+    # return dot
             
 
 
@@ -288,26 +279,155 @@ src_text = """
             return 0;
             }
             """
+
+class ASTTransformer(Transformer):
+    def program(self, items):
+        return {'program': items}
+
+    def statements(self, items):
+        return {'statements': items}
+
+    def statement(self, items):
+        return {'statement': items}
+
+    def display_statement(self, items):
+        return {'display_statement': items}
+
+    def input_statement(self, items):
+        return {'input_statement': items}
+
+    def if_statement(self, items):
+        return {'if_statement': items}
+
+    def otif_statement(self, items):
+        return {'otif_statement': items}
+
+    def otw_statement(self, items):
+        return {'otw_statement': items}
+
+    def for_loop(self, items):
+        return {'for_loop': items}
+
+    def while_loop(self, items):
+        return {'while_loop': items}
+
+    def GET_OUT(self, items):
+        return {'GET_OUT': items}
+
+    def GO_ON(self, items):
+        return {'GO_ON': items}
+
+    def function_definition(self, items):
+        return {'function_definition': items}
+
+    def exception_handling(self, items):
+        return {'exception_handling': items}
+
+    def expression(self, items):
+        return {'expression': items}
+
+    def modify(self, items):
+        return {'modify': items}
+
+    def push_back(self, items):
+        return {'push_back': items}
+
+    def push_front(self, items):
+        return {'push_front': items}
+
+    def display_args(self, items):
+        return {'display_args': items}
+
+    def function_args(self, items):
+        return {'function_args': items}
+
+    def tuple_arg(self, items):
+        return {'tuple_arg': items}
+
+    def list_arg(self, items):
+        return {'list_arg': items}
+
+    def list_slice(self, items):
+        return {'list_slice': items}
+
+    def compound_variable_declaration(self, items):
+        return {'compound_variable_declaration': items}
+
+    def word_dec(self, items):
+        return {'word_dec': items}
+
+    def tuple_dec(self, items):
+        return {'tuple_dec': items}
+
+    def list_dec(self, items):
+        return {'list_dec': items}
+
+    def for_args(self, items):
+        return {'for_args': items}
+
+    def for_condition(self, items):
+        return {'for_condition': items}
+
+    def conditionaloperator(self, items):
+        return {'conditionaloperator': items}
+
+    def arithmeticoperator(self, items):
+        return {'arithmeticoperator': items}
+
+    def logicaloperator(self, items):
+        return {'logicaloperator': items}
+
+    def function_call(self, items):
+        return {'function_call': items}
+
+    def function_call_args(self, items):
+        return {'function_call_args': items}
+
+
+
+
+
 parser = Lark(gram_file, start='program')
 tree = parser.parse(src_text)
-print(tree.pretty())
-terminal_tree = TerminalTransformer().transform(tree)
 
-def extract_terminals(tree):
-    if isinstance(tree, Tree):
-        return [extract_terminals(child) for child in tree.children]
-    else:
-        return tree
+print(tree)
+
+transformer = ASTTransformer()
+ast = transformer.transform(tree)
+print("\n AST: \n")
+print(ast)
 
 
-extracted_terminals = extract_terminals(tree)
+# # Assuming 'ast' is the AST generated from your code
+# dot = visualize_ast(ast)
+# dot.render('ast_5', format='png', cleanup=True)
 
-def print_tree(tree, depth=0):
-    if isinstance(tree, list):
-        for child in tree:
-            print_tree(child, depth + 1)
-    else:
-        print("  " * depth + str(tree))
 
-print_tree(extracted_terminals)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
