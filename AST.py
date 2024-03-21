@@ -1,10 +1,14 @@
-from lark import Lark, Transformer
-from lark.tree import Tree
+# from lark import Lark, Transformer
+# from lark.tree import Tree
+import lark
+import AST_final
 import graphviz
 
 gram_file = """
 
-program : typedef WS START LPAREN RPAREN LCURLY statements RETURN ZERO RCURLY
+start : program
+
+program : typedef START LPAREN RPAREN LCURLY statements RETURN ZERO RCURLY
 
 RETURN : "return"
 
@@ -21,7 +25,7 @@ RSQUARE : "]"
 
 
 statements : statement (SEMICOLON statements)?
-        | statement statements
+        | statement
         |
 
 
@@ -223,7 +227,7 @@ function_call_args : expression COMMA function_call_args
 
 string : QUOTATION string_cont QUOTATION
 
-string_cont : word (WS word)* (WS number)*
+string_cont : expression (WS expression)*
 
 word : identifier
 
@@ -243,26 +247,26 @@ bool : "True" | "False"
 %ignore WS
 """
 
-# def visualize_ast(ast):
-    # dot = graphviz.Digraph()
+def visualize_ast(ast):
+    dot = graphviz.Digraph()
 
-    # def add_nodes(parent, tree):
-    #     if isinstance(tree, dict):
-    #         for key, value in tree.items():
-    #             child = f"{parent}_{key}"
-    #             dot.node(child, str(key))
-    #             dot.edge(parent, child)
-    #             add_nodes(child, value)
-    #     elif isinstance(tree, list):
-    #         for item in tree:
-    #             add_nodes(parent, item)
-    #     else:
-    #         dot.node(f"{parent}_{tree}", str(tree))
+    def add_nodes(parent, tree):
+        if isinstance(tree, dict):
+            for key, value in tree.items():
+                child = f"{parent}_{key}"
+                dot.node(child, str(key))
+                dot.edge(parent, child)
+                add_nodes(child, value)
+        elif isinstance(tree, list):
+            for item in tree:
+                add_nodes(parent, item)
+        else:
+            dot.node(f"{parent}_{tree}", str(tree))
 
-    # dot.node("root", "AST")
-    # add_nodes("root", ast)
+    dot.node("root", "AST")
+    add_nodes("root", ast)
 
-    # return dot
+    return dot
             
 
 
@@ -271,7 +275,7 @@ bool : "True" | "False"
 src_text = """
             int start(){
             for (int i = 1; i = i+1; i <= 10){
-                display('inside for');
+                display('inside');
                 if (i == 7){
                     get_out;
                 }
@@ -280,152 +284,57 @@ src_text = """
             }
             """
 
-class ASTTransformer(Transformer):
-    def program(self, items):
-        return {'program': items}
-
-    def statements(self, items):
-        return {'statements': items}
-
-    def statement(self, items):
-        return {'statement': items}
-
-    def display_statement(self, items):
-        return {'display_statement': items}
-
-    def input_statement(self, items):
-        return {'input_statement': items}
-
-    def if_statement(self, items):
-        return {'if_statement': items}
-
-    def otif_statement(self, items):
-        return {'otif_statement': items}
-
-    def otw_statement(self, items):
-        return {'otw_statement': items}
-
-    def for_loop(self, items):
-        return {'for_loop': items}
-
-    def while_loop(self, items):
-        return {'while_loop': items}
-
-    def GET_OUT(self, items):
-        return {'GET_OUT': items}
-
-    def GO_ON(self, items):
-        return {'GO_ON': items}
-
-    def function_definition(self, items):
-        return {'function_definition': items}
-
-    def exception_handling(self, items):
-        return {'exception_handling': items}
-
-    def expression(self, items):
-        return {'expression': items}
-
-    def modify(self, items):
-        return {'modify': items}
-
-    def push_back(self, items):
-        return {'push_back': items}
-
-    def push_front(self, items):
-        return {'push_front': items}
-
-    def display_args(self, items):
-        return {'display_args': items}
-
-    def function_args(self, items):
-        return {'function_args': items}
-
-    def tuple_arg(self, items):
-        return {'tuple_arg': items}
-
-    def list_arg(self, items):
-        return {'list_arg': items}
-
-    def list_slice(self, items):
-        return {'list_slice': items}
-
-    def compound_variable_declaration(self, items):
-        return {'compound_variable_declaration': items}
-
-    def word_dec(self, items):
-        return {'word_dec': items}
-
-    def tuple_dec(self, items):
-        return {'tuple_dec': items}
-
-    def list_dec(self, items):
-        return {'list_dec': items}
-
-    def for_args(self, items):
-        return {'for_args': items}
-
-    def for_condition(self, items):
-        return {'for_condition': items}
-
-    def conditionaloperator(self, items):
-        return {'conditionaloperator': items}
-
-    def arithmeticoperator(self, items):
-        return {'arithmeticoperator': items}
-
-    def logicaloperator(self, items):
-        return {'logicaloperator': items}
-
-    def function_call(self, items):
-        return {'function_call': items}
-
-    def function_call_args(self, items):
-        return {'function_call_args': items}
 
 
 
 
 
-parser = Lark(gram_file, start='program')
-tree = parser.parse(src_text)
+# parser = Lark(gram_file, start='program')
+# tree = parser.parse(src_text)
 
-print(tree)
+# print(tree)
 
-transformer = ASTTransformer()
-ast = transformer.transform(tree)
-print("\n AST: \n")
-print(ast)
+# print(tree.pretty())
+
+# transformer = ASTTransformer()
+# ast = transformer.transform(tree)
+# print("\n AST: \n")
+# print(ast)
 
 
-# # Assuming 'ast' is the AST generated from your code
+# # # Assuming 'ast' is the AST generated from your code
 # dot = visualize_ast(ast)
 # dot.render('ast_5', format='png', cleanup=True)
 
 
+# new code
 
+parser = lark.Lark(gram_file, parser="lalr")
 
+    # Step 2: Use the parser (and lexer) to create a parse tree
+    # (concrete syntax)
+    # src_file = open("example_sums.txt", "r")
+    # src_text = "".join(src_file.readlines())
+concrete = parser.parse(src_text)
+print("Parse tree (concrete syntax):")
+print(concrete.pretty())
 
+    # Step 3: Transform the concrete syntax tree into
+    # an abstract tree, starting from the leaves and working
+    # up.
+    # Warning:  Lousy exceptions because of the way Lark applies these.
+transformer = AST_final.OurTransformer()
+ast = transformer.transform(concrete)
+print(ast)
+print(f"as {repr(ast)}")
 
+# # # Assuming 'ast' is the AST generated from your code
+dot = visualize_ast(ast)
+dot.render('ast_6', format='png', cleanup=True)
+print("done")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+if __name__ == '__main__':
+    main()
 
 
 
