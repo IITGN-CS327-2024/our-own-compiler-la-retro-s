@@ -11,33 +11,57 @@ def remove_none(lst):
     return flat_list
 
 class OurTransformer(lark.Transformer):
-    def program(self, children):
-        children = remove_none(children)
-        return ast_classes.program(children)
+    # def program(self, children):
+    #     typedef, statements = children[0], children[5]
+    #     # print(children[0], children[5])
+    #     return ast_classes.program(typedef, statements)
 
-    def typedef(children):
+    def start(self, children):
         children = remove_none(children)
+        return ast_classes.start(children)
+
+    def program(self, children):
+        # children = remove_none(children)
+        # return ast_classes.program(children)
+        children = remove_none(children)
+        if len(children)==0:
+            return None
+        else:
+            return children
+        
+        # children = remove_none(children)
+        # values = children
+        # indices_to_remove = [1, 2, 3, 4, 6, 7, 8]
+        # values = [values[i] for i in range(len(values)) if i not in indices_to_remove]
+        # values = values[:-1]
+        # return ast_classes.program(values)
+
+    def typedef(self, children):
         return ast_classes.typedef(children)
 
     def statements(self, children):
+        # print(children)
         children = remove_none(children)
         return ast_classes.statements(children)
 
     def statement(self, children):
+        # children = remove_none(children)
+        # return ast_classes.statement(children)
         children = remove_none(children)
-        return ast_classes.statement(children)
+        return children
+        
 
     def modify(self, children):
         children = remove_none(children)
-        return ast_classes.modify(children)
+        return ast_classes.Modify(children[0])
 
     def push_back(self, children):
         children = remove_none(children)
-        return ast_classes.push_back(children)
+        return ast_classes.PushBack(children)
 
     def push_front(self, children):
         children = remove_none(children)
-        return ast_classes.push_front(children)
+        return ast_classes.PushFront(children)
 
     def display_statement(self, children):
         children = remove_none(children)
@@ -45,27 +69,29 @@ class OurTransformer(lark.Transformer):
 
     def input_statement(self, children):
         children = remove_none(children)
-        return ast_classes.input_statement(children)
+        return ast_classes.inputstatement(children)
 
     def if_statement(self, children):
-        children = remove_none(children)
-        return ast_classes.if_statement(children)
-
-    # def if_statement(self, children):
-    #     expression, statements = children
-    #     return ast_classes.if_statement(expression, statements)
+        expression = children[0]
+        statements = children[1]
+        return ast_classes.if_statement(expression, statements)
 
     def otif_statement(self, children):
-        children = remove_none(children)
-        return ast_classes.otif_statement(children)
+        expression = children[0]
+        statements = children[1]
+        return ast_classes.otif_statement(expression, statements)
 
     def otw_statement(self, children):
         children = remove_none(children)
         return ast_classes.otw_statement(children)
 
     def for_loop(self, children):
-        children = remove_none(children)
-        return ast_classes.for_loop(children)
+        # print(children)
+        # print(children[2])
+        # print(children[5])
+        expression = children[2]
+        statements = children[5]
+        return ast_classes.for_loop(expression, statements)
 
     def while_loop(self, children):
         children = remove_none(children)
@@ -77,7 +103,7 @@ class OurTransformer(lark.Transformer):
 
     def exception_handling(self, children):
         children = remove_none(children)
-        return ast_classes.exception_handling(children)
+        return ast_classes.ExceptionHandling(children)
 
     def expression(self, children):
         children = remove_none(children)
@@ -85,59 +111,52 @@ class OurTransformer(lark.Transformer):
 
     def list_slice(self, children):
         children = remove_none(children)
-        return ast_classes.list_slice(children)
+        return ast_classes.ListSlice(children)
 
     def list_perf(self, children):
         children = remove_none(children)
-        return ast_classes.list_perf(children)
+        return ast_classes.ListPerf(children)
 
     def perform(self, children):
         children = remove_none(children)
-        return ast_classes.perform(children)
+        return ast_classes.Perform(children)
 
     def compound_variable_declaration(self, children):
         children = remove_none(children)
-        return ast_classes.compound_variable_declaration(children)
+        return ast_classes.CompoundVariableDeclaration(children)
 
     def word_dec(self, children):
         children = remove_none(children)
-        return ast_classes.word_dec(children)
+        return ast_classes.WordDec(children)
 
     def tuple_dec(self, children):
         children = remove_none(children)
-        return ast_classes.tuple_dec(children)
+        return ast_classes.TupleDec(children)
 
     def tuple_arg(self, children):
         children = remove_none(children)
-        return ast_classes.tuple_arg(children)
+        return ast_classes.TupleArg(children)
 
     def list_dec(self, children):
         children = remove_none(children)
-        return ast_classes.list_dec(children)
+        return ast_classes.ListDec(children)
 
     def list_arg(self, children):
         children = remove_none(children)
-        return ast_classes.list_arg(children)
+        return ast_classes.ListArg(children)
 
     def data_format(self, children):
         children = remove_none(children)
-        return ast_classes.data_format(children)
+        return ast_classes.DataFormat(children)
 
     def for_args(self, children):
         children = remove_none(children)
+        print(children)
         return ast_classes.for_args(children)
 
     def function_args(self, children):
         children = remove_none(children)
-        return ast_classes.function_args(children)
-
-    def expression(self, children):
-        children = remove_none(children)
-        return ast_classes.expression(children)
-
-    def typedef(self, children):
-        children = remove_none(children)
-        return ast_classes.typedef(children)
+        return ast_classes.FunctionArgs(children)
 
     def conditionaloperator(self, children):
         children = remove_none(children)
@@ -147,12 +166,9 @@ class OurTransformer(lark.Transformer):
         children = remove_none(children)
         return ast_classes.arithmeticoperator(children)
 
-    # def QUOTATION(self, children):
-    #     children = remove_none(children)
-    #     return ast_classes.QUOTATION(children)
+    def logicaloperator(self, children):
+        children = remove_none(children)
+        return ast_classes.logicaloperator(children)
+
     def QUOTATION(self, children):
         return "'"
-
-    def program(self, children):
-        children = remove_none(children)
-        return ast_classes.program(children)

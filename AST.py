@@ -1,5 +1,6 @@
 # from lark import Lark, Transformer
 # from lark.tree import Tree
+from ast import main
 import lark
 import AST_final
 import graphviz
@@ -25,8 +26,7 @@ RSQUARE : "]"
 
 
 statements : statement (SEMICOLON statements)?
-        | statement
-        |
+        | (statement)?
 
 
 SEMICOLON : ";"
@@ -161,8 +161,6 @@ data_format : number | string | bool
 
 for_condition : expression conditionaloperator expression
 
-# typedef : "int" | "bool" | "dotie" | "bigint" | "char"
-
 typedef : INT | BOOL | DOTIE | BIGINT | CHAR
 
 INT : "int"
@@ -174,8 +172,6 @@ DOTIE : "dotie"
 BIGINT : "bigint"
 
 CHAR : "char"
-
-# conditionaloperator : "<" | ">" | "<=" | ">=" | "==" | "!="
 
 conditionaloperator : LESS_THAN | GREATER_THAN | LESS_THAN_OR_EQUAL | GREATER_THAN_OR_EQUAL | EQUAL | NOT_EQUAL
 
@@ -191,8 +187,6 @@ EQUAL : "=="
 
 NOT_EQUAL : "!="
 
-# arithmeticoperator : "+" | "-" | "/" | "*" | "**" | "%"
-
 arithmeticoperator : ADDITION | SUBTRACTION | DIVISION | MULTIPLICATION | EXPONENTIATION | MODULUS
 
 ADDITION : "+"
@@ -206,8 +200,6 @@ MULTIPLICATION : "*"
 EXPONENTIATION : "**"
 
 MODULUS : "%"
-
-# logicaloperator : "&&" | "||"
 
 logicaloperator  : AND | OR
 
@@ -309,33 +301,55 @@ src_text = """
 
 # new code
 
-parser = lark.Lark(gram_file, parser="lalr")
+# parser = lark.Lark(gram_file, parser="lalr")
 
-    # Step 2: Use the parser (and lexer) to create a parse tree
-    # (concrete syntax)
-    # src_file = open("example_sums.txt", "r")
-    # src_text = "".join(src_file.readlines())
-concrete = parser.parse(src_text)
-print("Parse tree (concrete syntax):")
-print(concrete.pretty())
+#     # Step 2: Use the parser (and lexer) to create a parse tree
+#     # (concrete syntax)
+#     # src_file = open("example_sums.txt", "r")
+#     # src_text = "".join(src_file.readlines())
+# concrete = parser.parse(src_text)
+# print("Parse tree (concrete syntax):")
+# print(concrete.pretty())
 
-    # Step 3: Transform the concrete syntax tree into
-    # an abstract tree, starting from the leaves and working
-    # up.
-    # Warning:  Lousy exceptions because of the way Lark applies these.
-transformer = AST_final.OurTransformer()
-ast = transformer.transform(concrete)
-print(ast)
-print(f"as {repr(ast)}")
+#     # Step 3: Transform the concrete syntax tree into
+#     # an abstract tree, starting from the leaves and working
+#     # up.
+#     # Warning:  Lousy exceptions because of the way Lark applies these.
+# transformer = AST_final.OurTransformer()
+# ast = transformer.transform(concrete)
+# print(ast.pretty())
+# # print(f"as {repr(ast)}")
 
-# # # Assuming 'ast' is the AST generated from your code
-dot = visualize_ast(ast)
-dot.render('ast_6', format='png', cleanup=True)
-print("done")
+# # # # Assuming 'ast' is the AST generated from your code
+# # dot = visualize_ast(ast)
+# # dot.render('ast_6', format='png', cleanup=True)
+# # print("done")
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
+#     main()
+
+def main():
+    # Your script logic here
+    parser = lark.Lark(gram_file, parser="lalr")
+    concrete = parser.parse(src_text)
+    print("Parse tree (concrete syntax):")
+    # print(concrete.pretty())
+    
+    transformer = AST_final.OurTransformer()
+    print("AST:")
+    ast = transformer.transform(concrete)
+    # print("AST:")
+    # print(ast.pretty())
+    print(ast)
+
+# # Assuming 'ast' is the AST generated from your code
+    dot = visualize_ast(ast)
+    dot.render('ast_51', format='png', cleanup=True)
+    print("done")
+
+
+if __name__ == "__main__":
     main()
-
 
 
 

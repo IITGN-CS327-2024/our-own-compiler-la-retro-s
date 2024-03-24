@@ -10,28 +10,61 @@ class ASTNode(metaclass=ASTNodeMeta):
     """Abstract base class for AST nodes."""
     pass
 
+# class program(ASTNode):
+#     def __init__(self, typedef, statements):
+#         self.typedef = typedef
+#         self.statements = statements
+
+
+class start(ASTNode):
+    def __init__(self, values):
+        values = values[:-1]
+        for i, value in enumerate(values):
+            setattr(self, f'values{i}', value)
+
 class program(ASTNode):
-    def __init__(self, typedef, statements):
-        self.typedef = typedef
-        self.statements = statements
+    def __init__(self, values):
+        # indices_to_remove = [1, 2, 3, 4, 6, 7, 8]
+        # values = [values[i] for i in range(len(values)) if i not in indices_to_remove]
+        # values = values[:-1]
+        for i, child in enumerate(values):
+            setattr(self, f'value{i}', child)
+
 
 class typedef(ASTNode):
     def __init__(self, typedef):
+        # print("fk")
         self.typedef = typedef
+        for i, value in enumerate(typedef):
+            setattr(self, f'values{i}', value)
+
 
 class statements(ASTNode):
-    def __init__(self, statements):
-        self.statements = statements
+    def __init__(self, values):
+        # self.statements = values
+        for i, value in enumerate(values):
+            setattr(self, f'values{i}', value)
+
 
 class statement(ASTNode):
-    def __init__(self, statement):
-        self.statement = statement
+    def __init__(self, values):
+        # self.statement = statement
+        for i, value in enumerate(values):
+            setattr(self, f'values{i}', value)
+
+
+class DataFormat(ASTNode):
+    def __init__(self, values):
+        # self.value = value
+        for i, value in enumerate(values):
+            setattr(self, f'values{i}', value)
+
 # class statement(ASTNode):
 #     pass
 
-class statement(ASTNode):
-    def __init__(self, statements):
-        self.statements = statements
+# class statement(ASTNode):
+#     def __init__(self, statements):
+#         self.statements = statements
 
 class display_statement(statement):
     def __init__(self, display_args):
@@ -47,7 +80,7 @@ class inputstatement(statement):
 #         self.statements = statements
 
 class if_statement(statement):
-    def __init__(self, expression, statements):  # Corrected method name to __init__
+    def __init__(self, expression, statements):
         self.expression = expression
         self.statements = statements
 
@@ -56,7 +89,7 @@ class otif_statement(statement):
         self.expression = expression
         self.statements = statements
 
-class otw_statemen(statement):
+class otw_statement(statement):
     def __init__(self, statements):
         self.statements = statements
 
