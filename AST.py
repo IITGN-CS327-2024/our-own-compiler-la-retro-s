@@ -2,8 +2,10 @@
 # from lark.tree import Tree
 from ast import main
 import lark
+import ast_classes
 import AST_final
 import graphviz
+from graphviz import Digraph
 
 gram_file = """
 
@@ -25,9 +27,8 @@ LSQUARE : "["
 RSQUARE : "]"
 
 
-statements : statement (SEMICOLON statements)?
-        | (statement)?
-
+statements : statement+
+    
 
 SEMICOLON : ";"
 
@@ -46,14 +47,15 @@ statement : display_statement
         | exception_handling
         | expression
         | modify
+        | SEMICOLON
 
-modify : push_back | push_front
+modify : push_back_exp | push_front_exp
 
-push_back : word POINT PUSH_BACK LPAREN data_format RPAREN
+push_back_exp : word POINT PUSH_BACK LPAREN data_format RPAREN
 
 PUSH_BACK : "push_back"
 
-push_front : word POINT PUSH_FRONT LPAREN data_format RPAREN
+push_front_exp : word POINT PUSH_FRONT LPAREN data_format RPAREN
 
 PUSH_FRONT : "push_front"
 
@@ -62,6 +64,7 @@ display_statement : DISPLAY LPAREN display_args RPAREN
 DISPLAY : "display"
 
 display_args : expression COMMA display_args
+            | display_args COMMA expression
             | expression
             | QUOTATION expression QUOTATION
 
@@ -208,7 +211,8 @@ AND : "&&"
 OR : "||"
 
 
-variable_declaration : typedef word EQUALS expression
+variable_declaration : typedef word EQUALS expression 
+                        | typedef word
 
 variable_assignment : word EQUALS expression
 
@@ -243,42 +247,96 @@ def visualize_ast(ast):
     dot = graphviz.Digraph()
 
     def add_nodes(parent, tree):
+        print("node")
         if isinstance(tree, dict):
+            print("if node")
             for key, value in tree.items():
                 child = f"{parent}_{key}"
                 dot.node(child, str(key))
                 dot.edge(parent, child)
                 add_nodes(child, value)
         elif isinstance(tree, list):
+            print("ielf node")
             for item in tree:
                 add_nodes(parent, item)
         else:
             dot.node(f"{parent}_{tree}", str(tree))
-
+    print("hi")
     dot.node("root", "AST")
     add_nodes("root", ast)
 
     return dot
-            
+
+
+def tree_to_graphviz(tree, graph=None):
+
+    if graph is None:
+        graph = Digraph()
+
+    if isinstance(tree, ast_classes.ASTNode):
+        graph.node(str(id(tree)), label=str(tree))
+
+        try:
+            for child in tree.children:
+                if isinstance(child, ast_classes.ASTNode):
+                    graph.node(str(id(child)), label = str(child))
+                    graph.edge(str(id(tree)), str(id(child)))
+                    tree_to_graphviz(child, graph)
+
+                else:
+                    graph.node(str(id(child)), label=str(child))
+                    graph.edge(str(id(tree)), str(id(child)))
+               
+        except: pass 
+        
+    return graph      
 
 
 
 # parser = Lark(gram_file, start='program', transformer='terminal')
+# src_text = """
+#             int start(){
+#                 display('inside');
+#                 return 0;
+#             }
+#             """
+
+# src_text = """
+#             int start(){
+#             for (int i = 1; i = i+1; i <= 10){
+#                 display('inside');
+#                 if (i == 7){
+#                     get_out;
+#                 }
+#             }
+#             return 0;
+#             }
+#             """
+
 src_text = """
             int start(){
-            for (int i = 1; i = i+1; i <= 10){
-                display('inside');
-                if (i == 7){
-                    get_out;
-                }
+            nums.push_front(60);
+            nums.push_back(87)
+            int x = 10;
+            x = x + 1;
+            dotie y;
+            y = 2.54;
+            x = x + 1;
+            y = 2.54;
+            int k = 2929;
+            k = 'abhay';
+            if( a < 10){
+                x = x + 1;
+            }
+            otif ( 10 < a < 15){
+                x = x + 2;
+            }
+            otw {
+                x = x + 3;
             }
             return 0;
             }
             """
-
-
-
-
 
 
 # parser = Lark(gram_file, start='program')
@@ -333,19 +391,23 @@ def main():
     parser = lark.Lark(gram_file, parser="lalr")
     concrete = parser.parse(src_text)
     print("Parse tree (concrete syntax):")
-    # print(concrete.pretty())
-    
+    print(concrete.pretty())
+    print(type(concrete))
+    print("1")
     transformer = AST_final.OurTransformer()
     print("AST:")
     ast = transformer.transform(concrete)
+    print(type(ast))
+    print("1")
     # print("AST:")
     # print(ast.pretty())
     print(ast)
 
 # # Assuming 'ast' is the AST generated from your code
-    dot = visualize_ast(ast)
-    dot.render('ast_51', format='png', cleanup=True)
-    print("done")
+    # dot = visualize_ast(ast)
+    dot = tree_to_graphviz(ast)
+    dot.render('ast_55', format='png', cleanup=True)
+#     # print("done")
 
 
 if __name__ == "__main__":

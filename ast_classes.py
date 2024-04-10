@@ -17,47 +17,39 @@ class ASTNode(metaclass=ASTNodeMeta):
 
 
 class start(ASTNode):
-    def __init__(self, values):
-        values = values[:-1]
+     def __init__(self, values):
+
+        self.children = []
         for i, value in enumerate(values):
-            setattr(self, f'values{i}', value)
+            self.children.append(value)
 
-class program(ASTNode):
-    def __init__(self, values):
-        # indices_to_remove = [1, 2, 3, 4, 6, 7, 8]
-        # values = [values[i] for i in range(len(values)) if i not in indices_to_remove]
-        # values = values[:-1]
-        for i, child in enumerate(values):
-            setattr(self, f'value{i}', child)
+class Start(start): 
+   def __init__(self, values):
+      super().__init__(values)
 
-
-class typedef(ASTNode):
-    def __init__(self, typedef):
-        # print("fk")
-        self.typedef = typedef
-        for i, value in enumerate(typedef):
-            setattr(self, f'values{i}', value)
+class program(start):
+   def __init__(self, values):
+      super().__init__(values)
 
 
-class statements(ASTNode):
-    def __init__(self, values):
-        # self.statements = values
-        for i, value in enumerate(values):
-            setattr(self, f'values{i}', value)
+class typedef(start):
+   def __init__(self, values):
+      super().__init__(values)
 
 
-class statement(ASTNode):
-    def __init__(self, values):
-        # self.statement = statement
-        for i, value in enumerate(values):
-            setattr(self, f'values{i}', value)
+class statements(start):
+   def __init__(self, values):
+      super().__init__(values)
 
 
-class DataFormat(ASTNode):
-    def __init__(self, values):
-        # self.value = value
-        for i, value in enumerate(values):
-            setattr(self, f'values{i}', value)
+class statement(start):
+   def __init__(self, values):
+      super().__init__(values)
+
+
+# class DataFormat(start):
+#    def __init__(self, values):
+#       super().__init__(values)
 
 # class statement(ASTNode):
 #     pass
@@ -66,141 +58,150 @@ class DataFormat(ASTNode):
 #     def __init__(self, statements):
 #         self.statements = statements
 
-class display_statement(statement):
-    def __init__(self, display_args):
-        self.display_args = display_args
+class display_statement(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class inputstatement(statement):
-    def __init__(self, expression):
-        self.expression = expression
+class inputstatement(start):
+   def __init__(self, values):
+      super().__init__(values)
 
 # class if_statement(statement):
 #     def __init__(self, expression, statements):
 #         self.expression = expression
 #         self.statements = statements
 
-class if_statement(statement):
-    def __init__(self, expression, statements):
-        self.expression = expression
-        self.statements = statements
+class if_statement(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class otif_statement(statement):
-    def __init__(self, expression, statements):
-        self.expression = expression
-        self.statements = statements
+class otif_statement(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class otw_statement(statement):
-    def __init__(self, statements):
-        self.statements = statements
+class otw_statement(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class while_loop(statement):
-    def __init__(self, expression, statements):
-        self.expression = expression
-        self.statements = statements
+class while_loop(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class for_loop(statement):
-    def __init__(self, for_args, statements):
-        self.for_args = for_args
-        self.statements = statements
+class for_loop(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class function_definition(statement):
-    def __init__(self, typedef, word, function_args, statements):
-        self.typedef = typedef
-        self.word = word
-        self.function_args = function_args
-        self.statements = statements
+class for_arg(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class ExceptionHandling(statement):
-    def __init__(self, word, statements, catch_word, catch_statements, finally_statements):
-        self.word = word
-        self.statements = statements
-        self.catch_word = catch_word
-        self.catch_statements = catch_statements
-        self.finally_statements = finally_statements
+class for_condition(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class expression(statement):
-    def __init__(self, expression):
-        self.expression = expression
+class function_definition(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class Modify(statement):
-    def __init__(self, modify):
-        self.modify = modify
+class function_args(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class PushBack(Modify):
-    def __init__(self, word, data_format):
-        self.word = word
-        self.data_format = data_format
+class ExceptionHandling(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class PushFront(Modify):
-    def __init__(self, word, data_format):
-        self.word = word
-        self.data_format = data_format
+class expression(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class DisplayArgs(ASTNode):
-    def __init__(self, expressions):
-        self.expressions = expressions
+class Modify(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class FunctionArgs(ASTNode):
-    def __init__(self, function_args):
-        self.function_args = function_args
+class PushBack(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class for_args(ASTNode):
-    def __init__(self, expressions):
-        self.expressions = expressions
+class PushFront(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class TupleArg(ASTNode):
-    def __init__(self, tuple_data):
-        self.tuple_data = tuple_data
+class DisplayArgs(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class ListArg(ASTNode):
-    def __init__(self, data_formats):
-        self.data_formats = data_formats
+class FunctionArgs(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class ListSlice(statement):
-    def __init__(self, word, start_index, end_index):
-        self.word = word
-        self.start_index = start_index
-        self.end_index = end_index
+class for_args(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class CompoundVariableDeclaration(statement):
-    pass
+class TupleArg(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class WordDec(CompoundVariableDeclaration):
-    def __init__(self, word, word_value):
-        self.word = word
-        self.word_value = word_value
+class ListArg(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class TupleDec(CompoundVariableDeclaration):
-    def __init__(self, word, tuple_arg):
-        self.word = word
-        self.tuple_arg = tuple_arg
+class ListSlice(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class ListDec(CompoundVariableDeclaration):
-    def __init__(self, typedef, word, list_arg):
-        self.typedef = typedef
-        self.word = word
-        self.list_arg = list_arg
+# class CompoundVariableDeclaration(start):
+#    def __init__(self, values):
+#       super().__init__(values)
 
-class ListPerf(statement):
-    def __init__(self, word, perform):
-        self.word = word
-        self.perform = perform
+class WordDec(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class Perform(ASTNode):
-    def __init__(self, perform_type):
-        self.perform_type = perform_type
+class TupleDec(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class conditionaloperator(ASTNode):
-    def __init__(self, operator):
-        self.operator = operator
+class ListDec(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class arithmeticoperator(ASTNode):
-    def __init__(self, operator):
-        self.operator = operator
+class ListPerf(start):
+   def __init__(self, values):
+      super().__init__(values)
 
-class logicaloperator(ASTNode):
-    def __init__(self, operator):
-        self.operator = operator
+# class Perform(start):
+#    def __init__(self, values):
+#       super().__init__(values)
+
+class conditionaloperator(start):
+   def __init__(self, values):
+      super().__init__(values)
+
+class arithmeticoperator(start):
+   def __init__(self, values):
+      super().__init__(values)
+
+class logicaloperator(start):
+   def __init__(self, values):
+      super().__init__(values)
+
+class variable_declaration(start):
+   def __init__(self, values):
+      super().__init__(values)
+
+class variable_assignment(start):
+   def __init__(self, values):
+      super().__init__(values)
+
+class function_call(start):
+   def __init__(self, values):
+      super().__init__(values)
+
+class function_call_args(start):
+   def __init__(self, values):
+      super().__init__(values)
 
 # Constants for operators
 LESS_THAN = "<"
