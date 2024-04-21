@@ -195,6 +195,8 @@ class OurTransformer(lark.Transformer):
 
     def variable_declaration(self, children):
         children = remove_none(children)
+        # if(children[0] == "typedef")
+        #     childen[0] = typedef(slef, children)
         return ast_classes.variable_declaration(children)
 
     def variable_assignment(self, children):
@@ -253,6 +255,18 @@ class OurTransformer(lark.Transformer):
     def logicaloperator(self, children):
         children = remove_none(children)
         return ast_classes.logicaloperator(children)
+
+    # def ntype(self, children):
+    #     children = remove_none(children)
+    #     return ast_classes.ntype(children)
+
+    def number(self, children):
+        children = remove_none(children)
+        return ast_classes.number(children)
+
+    def decimal(self, children):
+        children = remove_none(children)
+        return ast_classes.decimal(children)
 
     def string(self, children):
         children = remove_none(children)
@@ -416,11 +430,17 @@ class OurTransformer(lark.Transformer):
     def PUSH_BACK(self, children):
         return children
     
-    def decimal(self, children):
-        return children
+    # def decimal(self, children):
+    #     return children
 
-    def number(self, children):
-        return children
+    # def number(self, children):
+    #     return children
+
+    # def decimal1(self, children):
+    #     return children
+
+    # def number1(self, children):
+    #     return children
 
     def bool(self, children):
         return children

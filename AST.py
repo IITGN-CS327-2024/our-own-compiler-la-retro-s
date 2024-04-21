@@ -293,6 +293,110 @@ def tree_to_graphviz(tree, graph=None):
 
 
 
+
+
+
+class Variable:
+    def __init__(self, name, data_type):
+        self.name = name
+        self.data_type = data_type
+
+class VariableStorage:
+    def __init__(self):
+        self.variables = {}
+
+    def add_variable(self, name, data_type):
+        if name in self.variables:
+            print(f"Variable '{name}' already exists.")
+        else:
+            self.variables[name] = Variable(name, data_type)
+            # print(f"Variable '{name}' added successfully.")
+
+    def is_variable_present(self, name):
+        return name in self.variables
+
+    def print_variables(self):
+        print("Variables:")
+        for name, variable in self.variables.items():
+            print(f"{name}: {variable.data_type}")
+
+    def get_data_type(self, name):
+        if name in self.variables:
+            return self.variables[name].data_type
+        else:
+            return None
+
+
+variable_storage = VariableStorage()
+
+def Semantic(tree):
+    
+    for child in tree.children:
+        # print(child)
+        # variable_storage.print_variables()
+        # if(child == program):
+        #     print("Abhay")
+        if isinstance(child, ast_classes.variable_declaration):
+                variable_storage.add_variable(child.children[1], child.children[0].children[0])
+                # print(child.children[0].children[0])
+                # print(child.children[1])
+                # variable_storage.print_variables()
+                # if isinstance(child, ast_classes.variable_declaration):
+        elif isinstance(child, ast_classes.variable_assignment):
+            if(not variable_storage.is_variable_present(child.children[0])):
+                print("Semantic Error : Variable", child.children[0], "not declared")
+            
+            exp = child.children[0]
+            exp1 = child.children[2].children[0].children[0]
+            exp2 = child.children[2].children[2].children[0]
+            # print(exp1)
+            # print(exp2)
+
+            if isinstance(exp1, ast_classes.number):
+                variable_storage.add_variable(exp1, 'int')
+            elif isinstance(exp1, ast_classes.decimal):
+                variable_storage.add_variable(exp1, 'dotie')
+            else:
+                if(not variable_storage.is_variable_present(exp1)):
+                    print("Semantic Error : Variable", exp1, "not declared")
+
+
+            if isinstance(exp2, ast_classes.number):
+                variable_storage.add_variable(exp2, 'int')
+            elif isinstance(exp2, ast_classes.decimal):
+                variable_storage.add_variable(exp2, 'dotie')
+            else:
+                if(not variable_storage.is_variable_present(exp2)):
+                    print("Semantic Error : Variable", exp2, "not declared")
+                    continue
+
+
+            ## Typecast check
+            t1 = variable_storage.get_data_type(exp)
+            t2 = variable_storage.get_data_type(exp1)
+            t3 = variable_storage.get_data_type(exp2)
+            
+            if(t1 == t2 and t2 == t3):
+                drd = 0
+            else:
+                print("Typecast Error : ")
+                print(exp, ", datatype - ",t1)
+                print(exp1, ", datatype - ",t2)
+                print(exp2, ", datatype - ",t3)
+            
+
+            
+        if isinstance(child, ast_classes.ASTNode):
+            Semantic(child)
+        # else:
+
+
+
+
+
+
+
+
 # parser = Lark(gram_file, start='program', transformer='terminal')
 # src_text = """
 #             int start(){
@@ -313,31 +417,36 @@ def tree_to_graphviz(tree, graph=None):
 #             }
 #             """
 
+
 src_text = """
             int start(){
-            nums.push_front(60);
-            nums.push_back(87)
             int x = 10;
-            x = x + 1;
-            dotie y;
-            y = 2.54;
-            x = x + 1;
-            y = 2.54;
-            int k = 2929;
-            k = 'abhay';
-            if( a < 10){
-                x = x + 1;
-            }
-            otif ( 10 < a < 15){
-                x = x + 2;
-            }
-            otw {
-                x = x + 3;
-            }
+            int y = 2;
+            bool z;
+            dotie p = 3.14;
+            p = p + 3.2;
+            bool a = true;
+            bool b = false;
             return 0;
             }
             """
-
+# nums.push_front(60);
+            # nums.push_back(87)
+# dotie y;
+#             y = 2.54;
+#             x = x + 1;
+#             y = 2.54;
+#             int k = 2929;
+#             k = 'abhay';
+#             if( a < 10){
+#                 x = x + 1;
+#             }a
+#             otif ( 10 < a < 15){
+#                 x = x + 2;
+#             }
+#             otw {
+#                 x = x + 3;
+#             }
 
 # parser = Lark(gram_file, start='program')
 # tree = parser.parse(src_text)
@@ -386,6 +495,9 @@ src_text = """
 # if __name__ == '__main__':
 #     main()
 
+
+
+
 def main():
     # Your script logic here
     parser = lark.Lark(gram_file, parser="lalr")
@@ -402,7 +514,7 @@ def main():
     # print("AST:")
     # print(ast.pretty())
     print(ast)
-
+    Semantic(ast)
 # # Assuming 'ast' is the AST generated from your code
     # dot = visualize_ast(ast)
     dot = tree_to_graphviz(ast)

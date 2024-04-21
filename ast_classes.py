@@ -203,6 +203,26 @@ class function_call_args(start):
    def __init__(self, values):
       super().__init__(values)
 
+# class ntype(start):
+#    def __init__(self, values):
+#       super().__init__(values)
+
+# class number1(start):
+#    def __init__(self, values):
+#       super().__init__(values)
+
+# class decimal1(start):
+#    def __init__(self, values):
+#       super().__init__(values)
+
+class number(start):
+   def __init__(self, values):
+      super().__init__(values)
+
+class decimal(start):
+   def __init__(self, values):
+      super().__init__(values)
+
 # Constants for operators
 LESS_THAN = "<"
 GREATER_THAN = ">"
