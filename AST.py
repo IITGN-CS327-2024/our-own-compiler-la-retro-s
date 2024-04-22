@@ -347,6 +347,40 @@ def Semantic(tree):
                 print("Semantic Error : Variable", child.children[0], "not declared")
             
             exp = child.children[0]
+            i = len(exp)
+            # for children in child.children[2]:
+            #     i = i + 1
+            if(i == 1):
+                # print(child.children[0])
+                if(variable_storage.is_variable_present(child.children[2].children[0])):
+                    exp1 = child.children[2].children[0]
+                else:
+                    exp1 = child.children[2].children[0].children[0]
+                    # print(exp1)
+                # print(exp1)
+                t1 = variable_storage.get_data_type(exp)
+                t2 = variable_storage.get_data_type(exp1)
+
+                if isinstance(child.children[2].children[0], ast_classes.number):
+                    # print(exp1)
+                    variable_storage.add_variable(exp1, 'int')
+                    # variable_storage.print_variables()
+                elif isinstance(child.children[2].children[0], ast_classes.decimal):
+                    variable_storage.add_variable(exp1, 'dotie')
+                else:
+                    if(not variable_storage.is_variable_present(exp1)):
+                        print("Semantic Error : Variable", exp1, "not declared")
+
+                # print(t1, t2)
+
+                if(t1 == t2):
+                    drd = 0
+                else:
+                    print("Typecast Error : ")
+                    print(exp, ", datatype - ",t1)
+                    print(exp1, ", datatype - ",t2)
+                continue
+
             exp1 = child.children[2].children[0].children[0]
             exp2 = child.children[2].children[2].children[0]
             # print(exp1)
