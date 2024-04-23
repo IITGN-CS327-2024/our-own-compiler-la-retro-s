@@ -7,7 +7,7 @@ Welcome to the official repository for the Kulant compiler. Kulant is a custom p
 
 ## Repository Structure
 
-- **Final_Compiler**: This files in this folder are sufficient to run the Kulant Compiler.
+- **Final_Compiler**: This files in this folder are required to run the Kulant Compiler.
 - **AST.py**: The main file of the compiler. It executes the core compilation logic.
 - **ast_classes.py**: Defines the classes for constructing the Abstract Syntax Tree (AST) utilized by Kulant.
 - **AST_final.py**: Contains the custom transformer definitions for the Kulant compiler.
