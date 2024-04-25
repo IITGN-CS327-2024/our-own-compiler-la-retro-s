@@ -13,6 +13,19 @@ Welcome to the official repository for the Kulant compiler. Kulant is a custom p
 - **AST_final.py**: Contains the custom transformer definitions for the Kulant compiler.
 - **gram_file.txt**: Contains the grammar definitions for the Kulant language.
 
+## Requirements
+
+Before running this project, ensure you have the following dependencies installed:
+
+- [Lark](https://github.com/lark-parser/lark) 
+- [Graphviz](https://graphviz.org/)
+
+You can install them using pip:
+
+```bash
+pip install lark graphviz
+
+
 ## Installation
 
 To set up the Kulant compiler on your local machine, follow these steps:
