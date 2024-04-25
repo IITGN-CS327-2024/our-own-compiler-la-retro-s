@@ -22,7 +22,6 @@ Before running this project, ensure you have the following dependencies installe
 
 You can install them using pip:
 
-```bash
 pip install lark graphviz
 
 
