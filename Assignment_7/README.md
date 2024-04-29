@@ -8,9 +8,7 @@ You can generate both AST and WAT files by running `AST.py`. If you want to run 
 
 To run `AST.py`, go to the terminal and run the command:
   
-'''bash
-$ python3 AST.py
-'''
+`$ python3 AST.py`
    
 
 This would generate a `.wat` file.
@@ -20,7 +18,7 @@ This would generate a `.wat` file.
 Now you would have to install `wat2wasm` toolkit to convert these `.wat` files to `.wasm` files, which are used to run test cases. Once you have installed the `wat2wasm` toolkit using the instructions from the website [WebAssembly/wabt](https://github.com/WebAssembly/wabt), use the command:
 
  
-$ wat2wasm <name of wat file> -o <name of wasm file>.    
+`$ wat2wasm <name of wat file> -o <name of wasm file>.` 
    
 
 ### Information about Keeping Files in the Same Directory
