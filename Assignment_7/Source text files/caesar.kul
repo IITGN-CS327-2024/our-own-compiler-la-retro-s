@@ -1,0 +1,18 @@
+    int start(){
+        int caesarEncrypt(int a[], int l, int k){
+            for(int i = 0; i < l; i = i+1){
+                a[i] = (a[i] + k)%26;
+            }
+            int z = 0;
+            return z;
+        }
+        int caesarDecrypt(int a[], int l, int k){
+            for(int i = 0; i < l; i = i+1){
+                a[i] = (a[i] - k + 26)%26;
+            }
+            int z = 0;
+            return z;
+        }
+        
+        return 0;
+    }

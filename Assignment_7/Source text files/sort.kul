@@ -1,0 +1,18 @@
+    int start(){
+        int sort(int a[], int l){
+            for(int i = 1; i < l; i = i+1){
+                for(int j = 1; j < l; j = i+1){
+                    int m = j-1;
+                    if(a[m] > a[j]){
+                        int t = a[j];
+                        a[j] = a[m];
+                        a[m] = t;
+                    }
+                }
+            }
+            int z = 0;
+            return z;
+        }
+
+        return 0;
+    }
