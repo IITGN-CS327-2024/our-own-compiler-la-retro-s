@@ -8,7 +8,9 @@ You can generate both AST and WAT files by running `AST.py`. If you want to run 
 
 To run `AST.py`, go to the terminal and run the command:
   
+'''bash
 $ python3 AST.py
+'''
    
 
 This would generate a `.wat` file.
